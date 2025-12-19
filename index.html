@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>2025 志工簽到系統</title>
+    <style>
+        body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        .item { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; }
+        input[type="text"], textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h2>志工簽到表單</h2>
+    <form id="signForm">
+        <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
+        <div class="item">
+            <label>狀態 (點選)</label>
+            <input type="radio" name="status" value="簽到" checked> 簽到
+            <input type="radio" name="status" value="簽退"> 簽退
+        </div>
+        <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
+        <div class="item"><label>事由 (詳答)</label><textarea id="reason" required></textarea></div>
+        <button type="submit" id="submitBtn">提交並儲存至雲端</button>
+    </form>
+
+    <script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec'; // 貼上您的 Apps Script 網址
+
+        document.getElementById('signForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = '儲存中...';
+
+            const payload = {
+                name: document.getElementById('name').value,
+                status: document.querySelector('input[name="status"]:checked').value,
+                idCard: document.getElementById('idCard').value,
+                reason: document.getElementById('reason').value
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
+            }).then(() => {
+                alert('單筆資料已成功儲存至資料庫！');
+                document.getElementById('signForm').reset();
+                btn.disabled = false;
+                btn.innerText = '提交並儲存至雲端';
+            }).catch(err => alert('錯誤: ' + err));
+        });
+    </script>
+</body>
+</html>
