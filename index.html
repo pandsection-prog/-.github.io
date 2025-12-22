@@ -89,9 +89,12 @@
     <form id="signForm">
         <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
         <div class="item">
-            <label>狀態 (點選)</label>
-            <input type="radio" name="status" value="簽到" checked> 簽到
-            <input type="radio" name="status" value="簽退"> 簽退
+            <div class="item">
+    <label>狀態 (選單)</label>
+    <select id="status" required>
+        <option value="簽到">簽到</option>
+        <option value="簽退">簽退</option>
+    </select>
         </div>
         <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
         <!-- 修改部分：改為下拉式選單 -->
@@ -125,12 +128,12 @@
         btn.disabled = true;
         btn.innerText = '儲存中...';
 
-        const payload = {
-            name: nameInput.value,
-            status: document.querySelector('input[name="status"]:checked').value,
-            idCard: idCardInput.value,
-            reason: document.getElementById('reason').value
-        };
+       const payload = {
+    name: nameInput.value,
+    status: document.getElementById('status').value, // 改為直接讀取 select 的 ID
+    idCard: idCardInput.value,
+    reason: document.getElementById('reason').value
+};
 
         fetch(scriptURL, {
             method: 'POST',
@@ -148,3 +151,4 @@
     </script>
 </body>
 </html>
+
