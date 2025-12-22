@@ -4,11 +4,49 @@
     <meta charset="UTF-8">
     <title>2025 志工簽到系統</title>
     <style>
-        body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .item { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; }
-        input[type="text"], select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
+       <style>
+    body { 
+        font-family: sans-serif; 
+        max-width: 400px; 
+        margin: 50px auto; 
+        padding: 20px; 
+        border-radius: 12px;
+        /* 消防主題色：深紅、鮮紅、警示藍、深橘 */
+        background: linear-gradient(135deg, #b91d1d, #ef4444, #1d4ed8, #f97316);
+        background-size: 400% 400%;
+        animation: fireAlarm 8s ease infinite;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        color: #333;
+    }
+
+    @keyframes fireAlarm {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    #signForm {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 25px;
+        border-radius: 10px;
+        border-top: 5px solid #b91d1d; /* 消防紅邊框 */
+    }
+
+    h2 { color: #b91d1d; text-align: center; margin-top: 0; }
+    .item { margin-bottom: 15px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; }
+    input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    
+    button { 
+        width: 100%; padding: 12px; 
+        background: #b91d1d; /* 消防紅按鈕 */
+        color: white; border: none; border-radius: 4px; 
+        cursor: pointer; font-size: 16px; font-weight: bold;
+        transition: 0.3s;
+    }
+    button:hover { background: #7f1d1d; box-shadow: 0 0 10px rgba(185, 29, 29, 0.5); }
+</style>
+
     </style>
 </head>
 <body>
@@ -71,51 +109,11 @@
             alert('錯誤: ' + err);
             btn.disabled = false;
         });
-        <style>
-    body { 
-        font-family: sans-serif; 
-        max-width: 400px; 
-        margin: 50px auto; 
-        padding: 20px; 
-        border-radius: 12px;
-        /* 消防主題色：深紅、鮮紅、警示藍、深橘 */
-        background: linear-gradient(135deg, #b91d1d, #ef4444, #1d4ed8, #f97316);
-        background-size: 400% 400%;
-        animation: fireAlarm 8s ease infinite;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        color: #333;
-    }
-
-    @keyframes fireAlarm {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    #signForm {
-        background: rgba(255, 255, 255, 0.95);
-        padding: 25px;
-        border-radius: 10px;
-        border-top: 5px solid #b91d1d; /* 消防紅邊框 */
-    }
-
-    h2 { color: #b91d1d; text-align: center; margin-top: 0; }
-    .item { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-    
-    button { 
-        width: 100%; padding: 12px; 
-        background: #b91d1d; /* 消防紅按鈕 */
-        color: white; border: none; border-radius: 4px; 
-        cursor: pointer; font-size: 16px; font-weight: bold;
-        transition: 0.3s;
-    }
-    button:hover { background: #7f1d1d; box-shadow: 0 0 10px rgba(185, 29, 29, 0.5); }
-</style>
+ 
 
     });
     </script>
 </body>
 </html>
+
 
