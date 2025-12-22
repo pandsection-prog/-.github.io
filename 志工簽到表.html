@@ -1,92 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>2025 志工簽到系統</title>
-    <style>
-        body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        .item { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
-    </style>
+    <title>志工簽到系統</title>
+    <script src="cdnjs.cloudflare.com"></script>
 </head>
 <body>
-    <h2>志工簽到表單</h2>
     <form id="signForm">
-        <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
-        <div class="item">
-            <label>狀態 (點選)</label>
-            <input type="radio" name="status" value="簽到" checked> 簽到
-            <input type="radio" name="status" value="簽退"> 簽退
-        </div>
-        <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
-        <div class="item"><label>事由 (詳答)</label><textarea id="reason" required></textarea></div>
-        <button type="submit" id="submitBtn">提交並儲存至雲端</button>
+        姓名：<input type="text" id="name" required onblur="autoFill()"><br>
+        身份證字號：<input type="text" id="idNumber" required><br>
+        狀態：<input type="radio" name="type" value="簽到" checked>簽到 
+             <input type="radio" name="type" value="簽退">簽退<br>
+        事由：<select id="reason"><option>1.參訪</option><option>2.授課講師</option></select><br>
+        <button type="submit">提交</button>
+        <button type="button" onclick="exportExcel()">匯出所有紀錄</button>
     </form>
 
     <script>
-    const scriptURL = 'https://docs.google.com/spreadsheets/d/159n7uGoZi4fjLfS3EsjxElVXE_xQ5UlPf6ZWNt1eIJ0/edit?gid=0#gid=0';
+        const GAS_URL = 'https://docs.google.com/spreadsheets/d/159n7uGoZi4fjLfS3EsjxElVXE_xQ5UlPf6ZWNt1eIJ0/edit?gid=0#gid=0'; // 貼上你的部署網址
 
-    const form = document.getElementById('signForm');
-    const nameInput = document.getElementById('name');
-    const idCardInput = document.getElementById('idCard');
-    const btn = document.getElementById('submitBtn');
+        // 自動填入：從瀏覽器快取讀取上次輸入的身分證
+        function autoFill() {
+            const savedData = localStorage.getItem(document.getElementById('name').value);
+            if (savedData) document.getElementById('idNumber').value = savedData;
+        }
 
-    /* ===============================
-       1️⃣ 網頁載入時，讀取上次資料
-    =============================== */
-    window.addEventListener('load', () => {
-        nameInput.value = localStorage.getItem('volunteer_name') || '';
-        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
-    });
-
-    /* ===============================
-       2️⃣ 輸入時即時儲存
-    =============================== */
-    nameInput.addEventListener('input', () => {
-        localStorage.setItem('volunteer_name', nameInput.value);
-    });
-
-    idCardInput.addEventListener('input', () => {
-        localStorage.setItem('volunteer_idCard', idCardInput.value);
-    });
-
-    /* ===============================
-       3️⃣ 原本的送出邏輯（不動）
-    =============================== */
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        btn.disabled = true;
-        btn.innerText = '儲存中...';
-
-        const payload = {
-            name: nameInput.value,
-            status: document.querySelector('input[name="status"]:checked').value,
-            idCard: idCardInput.value,
-            reason: document.getElementById('reason').value
+        document.getElementById('signForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                idNumber: document.getElementById('idNumber').value,
+                type: document.querySelector('input[name="type"]:checked').value,
+                reason: document.getElementById('reason').value
+            };
+            localStorage.setItem(data.name, data.idNumber); // 儲存至本地供下次使用
+            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) });
+            alert('提交成功');
         };
 
-        fetch(scriptURL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(payload)
-        }).then(() => {
-            alert('單筆資料已成功儲存至資料庫！');
-
-            // 不清除姓名與身分證（讓下次自動帶入）
-            document.getElementById('reason').value = '';
-            btn.disabled = false;
-            btn.innerText = '提交並儲存至雲端';
-        }).catch(err => {
-            alert('錯誤: ' + err);
-            btn.disabled = false;
-            btn.innerText = '提交並儲存至雲端';
-        });
-    });
+        // 將網頁當前數據或模擬數據導出為 Excel
+        function exportExcel() {
+            const ws = XLSX.utils.json_to_sheet([{姓名: "範例", 身份證: "A123", 狀態: "簽到", 事由: "參訪"}]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Records");
+            XLSX.writeFile(wb, "志工簽到表.xlsx");
+        }
     </script>
-
 </body>
 </html>
+
+
+
 
