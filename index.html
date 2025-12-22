@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <title>2025 志工簽到系統</title>
     <style>
-      body { 
+        body { 
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('fire.jpg');
             background-size: cover;
             background-position: center;
@@ -84,28 +84,28 @@
     </style>
 </head>
 <body>
-    <h2>志工簽到表單</h2>
-    <form id="signForm">
-        <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
-        <div class="item">
+    <div id="container">
+        <h2 id="mainTitle">志工簽到表單</h2>
+        <form id="signForm">
+            <div class="item"><label>姓名</label><input type="text" id="name" required></div>
             <div class="item">
-    <label>狀態 (選單)</label>
-    <select id="status" required>
-        <option value="簽到">簽到</option>
-        <option value="簽退">簽退</option>
-    </select>
-        </div>
-        <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
-        <!-- 修改部分：改為下拉式選單 -->
-        <div class="item">
-            <label>事由 (選單)</label>
-            <select id="reason" required>
-                <option value="參訪">1.參訪</option>
-                <option value="授課助教">2.授課助教</option>
-            </select>
-        </div>
-        <button type="submit" id="submitBtn">提交並儲存至雲端</button>
-    </form>
+                <label>狀態</label>
+                <select id="status" required>
+                    <option value="簽到">簽到</option>
+                    <option value="簽退">簽退</option>
+                </select>
+            </div>
+            <div class="item"><label>身分證字號</label><input type="text" id="idCard" required></div>
+            <div class="item">
+                <label>事由</label>
+                <select id="reason" required>
+                    <option value="參訪">1.參訪</option>
+                    <option value="授課助教">2.授課助教</option>
+                </select>
+            </div>
+            <button type="submit" id="submitBtn">提交並儲存至雲端</button>
+        </form>
+    </div>
 
     <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
@@ -127,19 +127,19 @@
         btn.disabled = true;
         btn.innerText = '儲存中...';
 
-       const payload = {
-    name: nameInput.value,
-    status: document.getElementById('status').value, // 改為直接讀取 select 的 ID
-    idCard: idCardInput.value,
-    reason: document.getElementById('reason').value
-};
+        const payload = {
+            name: nameInput.value,
+            status: document.getElementById('status').value,
+            idCard: idCardInput.value,
+            reason: document.getElementById('reason').value
+        };
 
         fetch(scriptURL, {
             method: 'POST',
             mode: 'no-cors',
             body: JSON.stringify(payload)
         }).then(() => {
-            alert('單筆資料已成功儲存至資料庫！');
+            alert('2025 簽到資料已成功儲存！');
             btn.disabled = false;
             btn.innerText = '提交並儲存至雲端';
         }).catch(err => {
@@ -150,5 +150,3 @@
     </script>
 </body>
 </html>
-
-
