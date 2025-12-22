@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <title>2025 志工簽到系統</title>
     <style>
-      body { 
+        body { 
             /* 使用提供的圖片作為背景，確保覆蓋全螢幕 */
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                         url('oaidalleapiprodscus.blob.core.windows.net');
@@ -81,70 +81,41 @@
             transition: 0.3s;
         }
         button:hover { background: #7f1d1d; }
-        <style>
-    body { 
-        /* 設定字型為標楷體，並加入通用字型備援 */
-        font-family: "標楷體", "DFKai-SB", "BiauKai", serif; 
-        max-width: 400px; 
-        margin: 50px auto; 
-        padding: 20px; 
-        border-radius: 12px;
-        background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
-
-    /* 確保所有輸入框與按鈕也同步使用標楷體 */
-    input, select, button, label {
-        font-family: "標楷體", "DFKai-SB", "BiauKai", serif;
-    }
-
-    @keyframes gradientBG {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-
-    #signForm {
-        background: rgba(255, 255, 255, 0.9);
-        padding: 20px;
-        border-radius: 8px;
-    }
-
-    .item { margin-bottom: 15px; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; }
-    input[type="text"], select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
-    button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: 0.3s; font-weight: bold; }
-    button:hover { background: #218838; }
-</style>
-
-
     </style>
 </head>
 <body>
-    <h2>志工簽到表單</h2>
-    <form id="signForm">
-        <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
-        <div class="item">
-            <label>狀態 (點選)</label>
-            <input type="radio" name="status" value="簽到" checked> 簽到
-            <input type="radio" name="status" value="簽退"> 簽退
-        </div>
-        <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
-        <!-- 修改部分：改為下拉式選單 -->
-        <div class="item">
-            <label>事由 (選單)</label>
-            <select id="reason" required>
-                <option value="參訪">1.參訪</option>
-                <option value="授課助教">2.授課助教</option>
-            </select>
-        </div>
-        <button type="submit" id="submitBtn">提交並儲存至雲端</button>
-    </form>
+    <div id="container">
+        <!-- 標題移至表單上方 -->
+        <h2 id="mainTitle">志工簽到表單</h2>
+        <form id="signForm">
+            <div class="item">
+                <label>姓名 (簡答)</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="item">
+                <label>狀態 (點選)</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="status" value="簽到" checked> 簽到</label>
+                    <label><input type="radio" name="status" value="簽退"> 簽退</label>
+                </div>
+            </div>
+            <div class="item">
+                <label>身分證字號 (簡答)</label>
+                <input type="text" id="idCard" required>
+            </div>
+            <div class="item">
+                <label>事由 (選單)</label>
+                <select id="reason" required>
+                    <option value="參訪">1.參訪</option>
+                    <option value="授課助教">2.授課助教</option>
+                </select>
+            </div>
+            <button type="submit" id="submitBtn">提交並儲存至雲端</button>
+        </form>
+    </div>
 
     <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
+    const scriptURL = 'script.google.com';
     const form = document.getElementById('signForm');
     const nameInput = document.getElementById('name');
     const idCardInput = document.getElementById('idCard');
@@ -182,15 +153,7 @@
             alert('錯誤: ' + err);
             btn.disabled = false;
         });
- 
-
     });
     </script>
 </body>
 </html>
-
-
-
-
-
-
