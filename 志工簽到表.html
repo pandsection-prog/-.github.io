@@ -21,21 +21,7 @@
             <input type="radio" name="status" value="簽退"> 簽退
         </div>
         <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
-        <div class="item">
-            <label>事由</label>
-            <select id="reasonSelect" required>
-                <option value="">請選擇</option>
-                <option value="參訪導覽">參訪導覽</option>
-                <option value="授課講師">授課講師</option>
-                <option value="其他">其他</option>
-            </select>
-        </div>
-
-        <div class="item" id="otherReasonBox" style="display:none;">
-            <label>請填寫其他事由</label>
-            <input type="text" id="otherReason">
-        </div>
-
+        <div class="item"><label>事由 (詳答)</label><textarea id="reason" required></textarea></div>
         <button type="submit" id="submitBtn">提交並儲存至雲端</button>
     </form>
 
