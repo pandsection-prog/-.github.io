@@ -1,47 +1,49 @@
-<form id="volunteerForm">
-  <input type="text" id="name" placeholder="姓名" required onchange="saveInfo()">
-  <input type="text" id="idNum" placeholder="身分證字號" required onchange="saveInfo()">
-  
-  <input type="radio" name="type" value="簽到" checked> 簽到
-  <input type="radio" name="type" value="簽退"> 簽退
-  
-  <select id="reason">
-    <option value="參訪">參訪</option>
-    <option value="授課講師">授課講師</option>
-  </select>
-  
-  <button type="button" onclick="submitData()">提交並下載 EXCEL</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>志工簽到系統</title>
+    <script src="cdnjs.cloudflare.com"></script>
+</head>
+<body>
+    <form id="signForm">
+        姓名：<input type="text" id="name" required onblur="autoFill()"><br>
+        身份證字號：<input type="text" id="idNumber" required><br>
+        狀態：<input type="radio" name="type" value="簽到" checked>簽到 
+             <input type="radio" name="type" value="簽退">簽退<br>
+        事由：<select id="reason"><option>1.參訪</option><option>2.授課講師</option></select><br>
+        <button type="submit">提交</button>
+        <button type="button" onclick="exportExcel()">匯出所有紀錄</button>
+    </form>
 
-<script src="cdnjs.cloudflare.com"></script>
-<script>
-// 自動載入上次輸入的資料
-window.onload = () => {
-  document.getElementById('name').value = localStorage.getItem('v_name') || '';
-  document.getElementById('idNum').value = localStorage.getItem('v_id') || '';
-};
+    <script>
+        const GAS_URL = 'YOUR_GAS_URL'; // 貼上你的部署網址
 
-function saveInfo() {
-  localStorage.setItem('v_name', document.getElementById('name').value);
-  localStorage.setItem('v_id', document.getElementById('idNum').value);
-}
+        // 自動填入：從瀏覽器快取讀取上次輸入的身分證
+        function autoFill() {
+            const savedData = localStorage.getItem(document.getElementById('name').value);
+            if (savedData) document.getElementById('idNumber').value = savedData;
+        }
 
-function submitData() {
-  const data = [[
-    new Date().toLocaleString(),
-    document.getElementById('name').value,
-    document.querySelector('input[name="type"]:checked').value,
-    document.getElementById('idNum').value,
-    document.getElementById('reason').value
-  ]];
+        document.getElementById('signForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const data = {
+                name: document.getElementById('name').value,
+                idNumber: document.getElementById('idNumber').value,
+                type: document.querySelector('input[name="type"]:checked').value,
+                reason: document.getElementById('reason').value
+            };
+            localStorage.setItem(data.name, data.idNumber); // 儲存至本地供下次使用
+            await fetch(GAS_URL, { method: 'POST', body: JSON.stringify(data) });
+            alert('提交成功');
+        };
 
-  // 匯出至 Excel 檔案
-  const ws = XLSX.utils.aoa_to_sheet([["時間", "姓名", "狀態", "身分證", "事由"], ...data]);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "簽到紀錄");
-  XLSX.writeFile(wb, "志工簽到表.xlsx");
-
-  // 串接免費資料庫建議使用 [Google Apps Script](script.google.com) 
-  // 將資料非同步傳送至 Google Sheet 以供管理員查閱
-}
-</script>
+        // 將網頁當前數據或模擬數據導出為 Excel
+        function exportExcel() {
+            const ws = XLSX.utils.json_to_sheet([{姓名: "範例", 身份證: "A123", 狀態: "簽到", 事由: "參訪"}]);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Records");
+            XLSX.writeFile(wb, "志工簽到表.xlsx");
+        }
+    </script>
+</body>
+</html>
