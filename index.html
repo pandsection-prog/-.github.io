@@ -114,56 +114,59 @@
         </form>
     </div>
     <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec'; // 
-const form = document.getElementById('signForm');
-const nameInput = document.getElementById('name');
-const idCardInput = document.getElementById('idCard');
-const statusSelect = document.getElementById('status'); // 修正：對應 select id
-const reasonSelect = document.getElementById('reason');
-const btn = document.getElementById('submitBtn');
+<script>
+    // 1. 務必更換此處網址
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec'; 
+    
+    const form = document.getElementById('signForm');
+    const nameInput = document.getElementById('name');
+    const idCardInput = document.getElementById('idCard');
+    const statusSelect = document.getElementById('status');
+    const reasonSelect = document.getElementById('reason');
+    const btn = document.getElementById('submitBtn');
 
-window.addEventListener('load', () => {
-    nameInput.value = localStorage.getItem('volunteer_name') || '';
-    idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
-});
-
-nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
-idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    btn.disabled = true;
-    btn.innerText = '儲存中...';
-
-    const payload = {
-        name: nameInput.value,
-        status: statusSelect.value, // 修正：直接取得下拉選單的值
-        idCard: idCardInput.value,
-        reason: reasonSelect.value
-    };
-
-    // 使用 URLSearchParams 以符合大部分 Google Apps Script 的接收格式
-    const formData = new URLSearchParams();
-    for (const key in payload) {
-        formData.append(key, payload[key]);
-    }
-
-    fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: formData
-    }).then(() => {
-        alert('單筆資料已成功儲存至資料庫！');
-        btn.disabled = false;
-        btn.innerText = '提交並儲存至雲端';
-    }).catch(err => {
-        alert('錯誤: ' + err);
-        btn.disabled = false;
-        btn.innerText = '提交並儲存至雲端';
+    // 載入 localStorage
+    window.addEventListener('load', () => {
+        nameInput.value = localStorage.getItem('volunteer_name') || '';
+        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
     });
-});
+
+    // 監聽輸入存入 localStorage
+    nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
+    idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (scriptURL.includes('你的Google')) {
+            alert('錯誤：請先在程式碼中填入正確的 scriptURL 網址');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = '儲存中...';
+
+        // 封裝資料
+        const formData = new URLSearchParams();
+        formData.append('name', nameInput.value);
+        formData.append('status', statusSelect.value);
+        formData.append('idCard', idCardInput.value);
+        formData.append('reason', reasonSelect.value);
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors', // 配合 Google Apps Script 常規設定
+            body: formData
+        }).then(() => {
+            alert('資料已傳送至雲端！');
+            btn.disabled = false;
+            btn.innerText = '提交並儲存至雲端';
+        }).catch(err => {
+            alert('傳送失敗: ' + err);
+            btn.disabled = false;
+            btn.innerText = '提交並儲存至雲端';
+        });
+    });
 </script>
 </body>
 </html>
-
-
