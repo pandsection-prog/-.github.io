@@ -7,7 +7,7 @@
         body { font-family: sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
         .item { margin-bottom: 15px; }
         label { display: block; font-weight: bold; }
-        input[type="text"], textarea { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
+        input[type="text"], select { width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box; }
         button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; cursor: pointer; }
     </style>
 </head>
@@ -21,43 +21,34 @@
             <input type="radio" name="status" value="簽退"> 簽退
         </div>
         <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
-        <div class="item"><label>事由 (詳答)</label><textarea id="reason" required></textarea></div>
+        <!-- 修改部分：改為下拉式選單 -->
+        <div class="item">
+            <label>事由 (選單)</label>
+            <select id="reason" required>
+                <option value="參訪">1.參訪</option>
+                <option value="授課助教">2.授課助教</option>
+            </select>
+        </div>
         <button type="submit" id="submitBtn">提交並儲存至雲端</button>
     </form>
 
     <script>
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
-
     const form = document.getElementById('signForm');
     const nameInput = document.getElementById('name');
     const idCardInput = document.getElementById('idCard');
     const btn = document.getElementById('submitBtn');
 
-    /* ===============================
-       1️⃣ 網頁載入時，讀取上次資料
-    =============================== */
     window.addEventListener('load', () => {
         nameInput.value = localStorage.getItem('volunteer_name') || '';
         idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
     });
 
-    /* ===============================
-       2️⃣ 輸入時即時儲存
-    =============================== */
-    nameInput.addEventListener('input', () => {
-        localStorage.setItem('volunteer_name', nameInput.value);
-    });
+    nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
+    idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
 
-    idCardInput.addEventListener('input', () => {
-        localStorage.setItem('volunteer_idCard', idCardInput.value);
-    });
-
-    /* ===============================
-       3️⃣ 原本的送出邏輯（不動）
-    =============================== */
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-
         btn.disabled = true;
         btn.innerText = '儲存中...';
 
@@ -74,18 +65,13 @@
             body: JSON.stringify(payload)
         }).then(() => {
             alert('單筆資料已成功儲存至資料庫！');
-
-            // 不清除姓名與身分證（讓下次自動帶入）
-            document.getElementById('reason').value = '';
             btn.disabled = false;
             btn.innerText = '提交並儲存至雲端';
         }).catch(err => {
             alert('錯誤: ' + err);
             btn.disabled = false;
-            btn.innerText = '提交並儲存至雲端';
         });
     });
     </script>
-
 </body>
 </html>
