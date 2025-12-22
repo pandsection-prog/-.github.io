@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <title>2025 志工簽到系統</title>
     <style>
-       body { 
-            /* https://github.com/pandsection-prog/-.github.io/blob/main/%E6%B6%88%E9%98%B2.jpg */
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                        url('fire.jpg');
+      body { 
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('fire.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -16,72 +14,73 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            /* 字體設定為標楷體，字級 30px */
             font-family: "標楷體", "DFKai-SB", "BiauKai", serif;
             font-size: 30px;
-            color: white; /* 調整文字顏色以配合深色背景 */
+            color: white;
+        }
+
+        /* 彩色呼吸燈動畫 */
+        @keyframes rainbowBreath {
+            0% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+            20% { color: #ff8000; text-shadow: 0 0 20px #ff8000; }
+            40% { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
+            60% { color: #00ff00; text-shadow: 0 0 20px #00ff00; }
+            80% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
+            100% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
         }
 
         #container {
-            width: 100%;
-            height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
+            flex-direction: column; /* 直式排列 */
             align-items: center;
+            width: 100%;
             padding: 20px;
-            box-sizing: border-box;
         }
 
         h2#mainTitle {
-            color: white;
+            font-size: 45px;
+            margin-bottom: 30px;
+            animation: rainbowBreath 4s infinite ease-in-out; /* 套用呼吸燈 */
             text-align: center;
-            font-size: 32px;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px #000000;
         }
 
         #signForm {
-            background: rgba(255, 255, 255, 0.95); /* 表單設置為半透明白色背景 */
-            width: 90%;
-            max-width: 600px;
+            background: rgba(255, 255, 255, 0.95);
+            width: 100%;
+            max-width: 500px;
             padding: 30px;
-            border-radius: 10px;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            color: #333; /* 表單內文字改為深色以利閱讀 */
+            color: #333;
         }
 
-        .item { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        .item { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 24px; }
         
         input, select { 
             width: 100%; 
             padding: 12px; 
-            font-size: 20px;
+            font-size: 22px;
             font-family: inherit;
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
+            border: 2px solid #ccc; 
+            border-radius: 8px; 
             box-sizing: border-box; 
         }
-
-        input[type="radio"] { transform: scale(1.2); margin-right: 8px; vertical-align: middle; }
-        label input[type="radio"] { display: inline; } /* 修正 radio button 標籤的佈局 */
 
         button { 
             width: 100%; 
             padding: 15px; 
-            background: #b91d1d; /* 消防主題紅色 */
+            background: #b91d1d; 
             color: white; 
             border: none; 
-            border-radius: 4px; 
+            border-radius: 8px; 
             cursor: pointer; 
-            font-size: 22px; 
+            font-size: 24px; 
             font-family: inherit;
             font-weight: bold;
             transition: 0.3s;
         }
-        button:hover { background: #7f1d1d; }
-
+        button:hover { background: #7f1d1d; transform: scale(1.02); }
     </style>
 </head>
 <body>
@@ -151,4 +150,5 @@
     </script>
 </body>
 </html>
+
 
