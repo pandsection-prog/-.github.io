@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html>
 <head>
     <meta charset="UTF-8">
     <title>2025 志工簽到系統</title>
     <style>
-        body { 
+       body { 
             /* https://github.com/pandsection-prog/-.github.io/blob/main/%E6%B6%88%E9%98%B2.jpg */
             background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
                         url('fire.jpg');
@@ -81,92 +81,70 @@
             transition: 0.3s;
         }
         button:hover { background: #7f1d1d; }
+
     </style>
 </head>
 <body>
-    <div id="container">
-        <!-- 標題移至表單上方 -->
-        <h2 id="mainTitle">志工簽到表單</h2>
-        <form id="signForm">
-            <div class="item">
-                <label>姓名 (簡答)</label>
-                <input type="text" id="name" required>
-            </div>
-            <div class="item">
-                <label>狀態 (選單)</label>
-                <select id="status" required>
-                    <option value="簽到">簽到</option>
-                    <option value="簽退">簽退</option>
-                </select>
-            </div>
-            <div class="item">
-                <label>身分證字號 (簡答)</label>
-                <input type="text" id="idCard" required>
-            </div>
-            <div class="item">
-                <label>事由 (選單)</label>
-                <select id="reason" required>
-                    <option value="參訪">1.參訪</option>
-                    <option value="授課助教">2.授課助教</option>
-                </select>
-            </div>
-            <button type="submit" id="submitBtn">提交並儲存至雲端</button>
-        </form>
-    </div>
+    <h2>志工簽到表單</h2>
+    <form id="signForm">
+        <div class="item"><label>姓名 (簡答)</label><input type="text" id="name" required></div>
+        <div class="item">
+            <label>狀態 (點選)</label>
+            <input type="radio" name="status" value="簽到" checked> 簽到
+            <input type="radio" name="status" value="簽退"> 簽退
+        </div>
+        <div class="item"><label>身分證字號 (簡答)</label><input type="text" id="idCard" required></div>
+        <!-- 修改部分：改為下拉式選單 -->
+        <div class="item">
+            <label>事由 (選單)</label>
+            <select id="reason" required>
+                <option value="參訪">1.參訪</option>
+                <option value="授課助教">2.授課助教</option>
+            </select>
+        </div>
+        <button type="submit" id="submitBtn">提交並儲存至雲端</button>
+    </form>
+
     <script>
-<script>
-    // 1. 務必更換此處網址
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec'; 
-    
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
     const form = document.getElementById('signForm');
     const nameInput = document.getElementById('name');
     const idCardInput = document.getElementById('idCard');
-    const statusSelect = document.getElementById('status');
-    const reasonSelect = document.getElementById('reason');
     const btn = document.getElementById('submitBtn');
 
-    // 載入 localStorage
     window.addEventListener('load', () => {
         nameInput.value = localStorage.getItem('volunteer_name') || '';
         idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
     });
 
-    // 監聽輸入存入 localStorage
     nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
     idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        if (scriptURL.includes('你的Google')) {
-            alert('錯誤：請先在程式碼中填入正確的 scriptURL 網址');
-            return;
-        }
-
         btn.disabled = true;
         btn.innerText = '儲存中...';
 
-        // 封裝資料
-        const formData = new URLSearchParams();
-        formData.append('name', nameInput.value);
-        formData.append('status', statusSelect.value);
-        formData.append('idCard', idCardInput.value);
-        formData.append('reason', reasonSelect.value);
+        const payload = {
+            name: nameInput.value,
+            status: document.querySelector('input[name="status"]:checked').value,
+            idCard: idCardInput.value,
+            reason: document.getElementById('reason').value
+        };
 
         fetch(scriptURL, {
             method: 'POST',
-            mode: 'no-cors', // 配合 Google Apps Script 常規設定
-            body: formData
+            mode: 'no-cors',
+            body: JSON.stringify(payload)
         }).then(() => {
-            alert('資料已傳送至雲端！');
+            alert('單筆資料已成功儲存至資料庫！');
             btn.disabled = false;
             btn.innerText = '提交並儲存至雲端';
         }).catch(err => {
-            alert('傳送失敗: ' + err);
+            alert('錯誤: ' + err);
             btn.disabled = false;
-            btn.innerText = '提交並儲存至雲端';
         });
     });
-</script>
+    </script>
 </body>
 </html>
