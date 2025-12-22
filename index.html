@@ -26,32 +26,66 @@
     </form>
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec'; // 貼上您的 Apps Script 網址
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
 
-        document.getElementById('signForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = '儲存中...';
+    const form = document.getElementById('signForm');
+    const nameInput = document.getElementById('name');
+    const idCardInput = document.getElementById('idCard');
+    const btn = document.getElementById('submitBtn');
 
-            const payload = {
-                name: document.getElementById('name').value,
-                status: document.querySelector('input[name="status"]:checked').value,
-                idCard: document.getElementById('idCard').value,
-                reason: document.getElementById('reason').value
-            };
+    /* ===============================
+       1️⃣ 網頁載入時，讀取上次資料
+    =============================== */
+    window.addEventListener('load', () => {
+        nameInput.value = localStorage.getItem('volunteer_name') || '';
+        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
+    });
 
-            fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: JSON.stringify(payload)
-            }).then(() => {
-                alert('單筆資料已成功儲存至資料庫！');
-                document.getElementById('signForm').reset();
-                btn.disabled = false;
-                btn.innerText = '提交並儲存至雲端';
-            }).catch(err => alert('錯誤: ' + err));
+    /* ===============================
+       2️⃣ 輸入時即時儲存
+    =============================== */
+    nameInput.addEventListener('input', () => {
+        localStorage.setItem('volunteer_name', nameInput.value);
+    });
+
+    idCardInput.addEventListener('input', () => {
+        localStorage.setItem('volunteer_idCard', idCardInput.value);
+    });
+
+    /* ===============================
+       3️⃣ 原本的送出邏輯（不動）
+    =============================== */
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        btn.disabled = true;
+        btn.innerText = '儲存中...';
+
+        const payload = {
+            name: nameInput.value,
+            status: document.querySelector('input[name="status"]:checked').value,
+            idCard: idCardInput.value,
+            reason: document.getElementById('reason').value
+        };
+
+        fetch(scriptURL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(payload)
+        }).then(() => {
+            alert('單筆資料已成功儲存至資料庫！');
+
+            // 不清除姓名與身分證（讓下次自動帶入）
+            document.getElementById('reason').value = '';
+            btn.disabled = false;
+            btn.innerText = '提交並儲存至雲端';
+        }).catch(err => {
+            alert('錯誤: ' + err);
+            btn.disabled = false;
+            btn.innerText = '提交並儲存至雲端';
         });
+    });
     </script>
+
 </body>
 </html>
