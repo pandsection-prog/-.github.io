@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2025 志工簽到系統</title>
     <style>
         body { 
@@ -16,10 +17,10 @@
             min-height: 100vh;
             font-family: "標楷體", "DFKai-SB", "BiauKai", serif;
             color: white;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* 歡迎畫面與若隱若現動畫 */
+        /* 歡迎畫面：冰藍色、若隱若現動畫、比例縮放字體 */
         @keyframes fadeInOut {
             0% { opacity: 0; }
             50% { opacity: 1; }
@@ -37,17 +38,20 @@
         }
 
         #welcomeText {
-            font-size: 100px;
+            font-size: 15vw; /* 按視窗比例自動調整大小 */
             color: #A5F2F3; /* 冰藍色 */
             text-shadow: 0 0 20px #A5F2F3;
             animation: fadeInOut 3s ease-in-out forwards;
+            white-space: nowrap;
         }
 
+        /* 主容器與表單：按視窗自動調整大小比例 */
         #container {
-            display: none; /* 初始隱藏，待歡迎結束顯示 */
+            display: none; 
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            width: 90%; /* 寬度隨視窗縮放 */
+            max-width: 600px; /* 最大上限 */
             padding: 20px;
         }
 
@@ -57,38 +61,42 @@
             margin-bottom: 30px;
             color: #000000; 
             text-align: center;
-            text-shadow: none;
         }
 
         #signForm {
             background: rgba(255, 255, 255, 0.95);
-            width: 100%;
-            max-width: 500px;
-            padding: 30px;
+            width: 100%; /* 自動填滿容器百分比 */
+            padding: 5%; /* 內距比例化 */
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             color: #333;
+            box-sizing: border-box;
         }
 
-        .item { margin-bottom: 25px; }
-        label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 24px; }
+        .item { margin-bottom: 20px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 1.5rem; }
         
         input, select { 
-            width: 100%; padding: 12px; font-size: 22px; font-family: inherit;
+            width: 100%; padding: 12px; font-size: 1.2rem; font-family: inherit;
             border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; 
         }
 
         button { 
             width: 100%; padding: 15px; background: #b91d1d; color: white; 
-            border: none; border-radius: 8px; cursor: pointer; font-size: 24px; 
+            border: none; border-radius: 8px; cursor: pointer; font-size: 1.5rem; 
             font-family: inherit; font-weight: bold; transition: 0.3s;
         }
         button:hover { background: #7f1d1d; transform: scale(1.02); }
+
+        /* 手機版字體微調 */
+        @media (max-width: 480px) {
+            h2#mainTitle { font-size: 40px; }
+            label { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- 初始歡迎畫面 -->
     <div id="welcomeOverlay">
         <div id="welcomeText">歡迎</div>
     </div>
@@ -117,22 +125,22 @@
     </div>
 
     <script>
-    // 歡迎動畫結束後切換顯示
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            document.getElementById('welcomeOverlay').style.display = 'none';
-            document.getElementById('container').style.display = 'flex';
-        }, 3000); // 3秒後跳轉
-
-        nameInput.value = localStorage.getItem('volunteer_name') || '';
-        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
-    });
-
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
     const form = document.getElementById('signForm');
     const nameInput = document.getElementById('name');
     const idCardInput = document.getElementById('idCard');
     const btn = document.getElementById('submitBtn');
+
+    window.addEventListener('load', () => {
+        // 歡迎畫面 3 秒後自動隱藏並顯示表單
+        setTimeout(() => {
+            document.getElementById('welcomeOverlay').style.display = 'none';
+            document.getElementById('container').style.display = 'flex';
+        }, 3000);
+
+        nameInput.value = localStorage.getItem('volunteer_name') || '';
+        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
+    });
 
     nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
     idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
