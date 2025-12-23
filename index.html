@@ -6,7 +6,8 @@
     <title>2025 志工簽到系統</title>
     <style>
         body { 
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('NFA.jpg');
+            /* 背景亮度 100% */
+            background: url('fire.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -16,11 +17,10 @@
             align-items: center;
             min-height: 100vh;
             font-family: "標楷體", "DFKai-SB", "BiauKai", serif;
-            color: white;
             overflow-x: hidden;
         }
 
-        /* 歡迎畫面：冰藍色、若隱若現動畫、比例縮放字體 */
+        /* 歡迎畫面與若隱若現動畫 */
         @keyframes fadeInOut {
             0% { opacity: 0; }
             50% { opacity: 1; }
@@ -38,65 +38,61 @@
         }
 
         #welcomeText {
-            font-size: 15vw; /* 按視窗比例自動調整大小 */
+            font-size: 15vw; /* 隨視窗比例縮放 */
             color: #A5F2F3; /* 冰藍色 */
             text-shadow: 0 0 20px #A5F2F3;
             animation: fadeInOut 3s ease-in-out forwards;
             white-space: nowrap;
         }
 
-        /* 主容器與表單：按視窗自動調整大小比例 */
+        /* 表單容器比例自動調整 */
         #container {
             display: none; 
             flex-direction: column;
             align-items: center;
-            width: 90%; /* 寬度隨視窗縮放 */
-            max-width: 600px; /* 最大上限 */
+            width: 90%;
+            max-width: 600px;
             padding: 20px;
         }
 
-        /* 標題：55px, 單一黑色 */
+        /* 標題：55px, 單一青色 */
         h2#mainTitle {
             font-size: 55px;
             margin-bottom: 30px;
-            color: #000000; 
+            color: #00FFFF; /* 青色 */
             text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         #signForm {
-            background: rgba(255, 255, 255, 0.95);
-            width: 100%; /* 自動填滿容器百分比 */
-            padding: 5%; /* 內距比例化 */
+            background: rgba(255, 255, 255, 0.9);
+            width: 100%;
+            padding: 40px;
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             color: #333;
             box-sizing: border-box;
         }
 
-        .item { margin-bottom: 20px; }
-        label { display: block; font-weight: bold; margin-bottom: 8px; font-size: 1.5rem; }
+        .item { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 24px; }
         
         input, select { 
-            width: 100%; padding: 12px; font-size: 1.2rem; font-family: inherit;
+            width: 100%; padding: 12px; font-size: 22px; font-family: inherit;
             border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; 
         }
 
         button { 
             width: 100%; padding: 15px; background: #b91d1d; color: white; 
-            border: none; border-radius: 8px; cursor: pointer; font-size: 1.5rem; 
+            border: none; border-radius: 8px; cursor: pointer; font-size: 24px; 
             font-family: inherit; font-weight: bold; transition: 0.3s;
         }
         button:hover { background: #7f1d1d; transform: scale(1.02); }
-
-        /* 手機版字體微調 */
-        @media (max-width: 480px) {
-            h2#mainTitle { font-size: 40px; }
-            label { font-size: 1.2rem; }
-        }
     </style>
 </head>
 <body>
 
+    <!-- 初始歡迎畫面 -->
     <div id="welcomeOverlay">
         <div id="welcomeText">歡迎</div>
     </div>
@@ -125,25 +121,25 @@
     </div>
 
     <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
-    const form = document.getElementById('signForm');
-    const nameInput = document.getElementById('name');
-    const idCardInput = document.getElementById('idCard');
-    const btn = document.getElementById('submitBtn');
-
+    // 歡迎動畫後切換顯示
     window.addEventListener('load', () => {
-        // 歡迎畫面 3 秒後自動隱藏並顯示表單
         setTimeout(() => {
             document.getElementById('welcomeOverlay').style.display = 'none';
             document.getElementById('container').style.display = 'flex';
         }, 3000);
 
+        const nameInput = document.getElementById('name');
+        const idCardInput = document.getElementById('idCard');
         nameInput.value = localStorage.getItem('volunteer_name') || '';
         idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
     });
 
-    nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
-    idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
+    const form = document.getElementById('signForm');
+    const btn = document.getElementById('submitBtn');
+
+    form.name.addEventListener('input', (e) => localStorage.setItem('volunteer_name', e.target.value));
+    form.idCard.addEventListener('input', (e) => localStorage.setItem('volunteer_idCard', e.target.value));
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -151,9 +147,9 @@
         btn.innerText = '儲存中...';
 
         const payload = {
-            name: nameInput.value,
+            name: document.getElementById('name').value,
             status: document.getElementById('status').value,
-            idCard: idCardInput.value,
+            idCard: document.getElementById('idCard').value,
             reason: document.getElementById('reason').value
         };
 
@@ -172,5 +168,4 @@
     });
     </script>
 </body>
-</html>
-
+</html>```
