@@ -6,11 +6,10 @@
     <title>2025 志工簽到系統</title>
     <style>
         body { 
-            /* 背景亮度 100%，大小隨視窗比例縮放 */
+            /* 背景亮度 100%，大小自動調整正常比例 */
             background-image: url('NFA.jpg');
-            background-size: 100% 100%; /* 強制背景與視窗長寬等比 */
+            background-size: cover; 
             background-position: center;
-            background-repeat: no-repeat;
             background-attachment: fixed;
             margin: 0;
             display: flex;
@@ -25,27 +24,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* 表單容器隨視窗寬度調整比例 */
+            /* 介面大小按照視窗自動調整比例 */
             width: 90%;
-            max-width: 600px;
+            max-width: 550px;
             padding: 20px;
         }
 
         h2#mainTitle {
-            /* 標題字體 55px，顏色為青色 */
+            /* 標題字體 55px，顏色青色 */
             font-size: 55px;
             color: #00FFFF;
             margin-bottom: 30px;
             text-align: center;
-            /* 移除呼吸燈動畫 */
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+            /* 移除呼吸燈與遮罩 */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
         }
 
         #signForm {
             background: rgba(255, 255, 255, 0.95);
-            /* 表格寬度自動填滿容器比例 */
             width: 100%;
-            padding: 40px;
+            padding: 35px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             color: #333;
@@ -80,12 +78,10 @@
         }
         button:hover { background: #7f1d1d; transform: scale(1.02); }
 
-        /* 手機版微調 */
+        /* 行動裝置適應 */
         @media (max-width: 480px) {
             h2#mainTitle { font-size: 40px; }
-            #signForm { padding: 25px; }
-            label { font-size: 20px; }
-            input, select, button { font-size: 18px; }
+            #signForm { padding: 20px; }
         }
     </style>
 </head>
