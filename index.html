@@ -19,33 +19,45 @@
             overflow: hidden;
         }
 
-        /* 歡迎畫面樣式 */
-        #welcomeScreen {
+        /* 歡迎畫面與若隱若現動畫 */
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        #welcomeOverlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: black;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
-            transition: opacity 1s ease;
+            z-index: 9999;
         }
-        #welcomeText { font-size: 55px; color: white; }
+
+        #welcomeText {
+            font-size: 100px;
+            color: #A5F2F3; /* 冰藍色 */
+            text-shadow: 0 0 20px #A5F2F3;
+            animation: fadeInOut 3s ease-in-out forwards;
+        }
 
         #container {
-            display: none; /* 初始隱藏 */
+            display: none; /* 初始隱藏，待歡迎結束顯示 */
             flex-direction: column;
             align-items: center;
             width: 100%;
             padding: 20px;
         }
 
-        /* 標題修改：大小55px, 單一黑色 */
+        /* 標題：55px, 單一黑色 */
         h2#mainTitle {
             font-size: 55px;
             margin-bottom: 30px;
-            color: black; 
+            color: #000000; 
             text-align: center;
+            text-shadow: none;
         }
 
         #signForm {
@@ -75,8 +87,9 @@
     </style>
 </head>
 <body>
+
     <!-- 初始歡迎畫面 -->
-    <div id="welcomeScreen">
+    <div id="welcomeOverlay">
         <div id="welcomeText">歡迎</div>
     </div>
 
@@ -104,17 +117,15 @@
     </div>
 
     <script>
-    // 歡迎畫面邏輯：顯示 2 秒後跳轉
-    window.addEventListener('DOMContentLoaded', () => {
+    // 歡迎動畫結束後切換顯示
+    window.addEventListener('load', () => {
         setTimeout(() => {
-            const welcome = document.getElementById('welcomeScreen');
-            const container = document.getElementById('container');
-            welcome.style.opacity = '0';
-            setTimeout(() => {
-                welcome.style.display = 'none';
-                container.style.display = 'flex';
-            }, 1000);
-        }, 2000);
+            document.getElementById('welcomeOverlay').style.display = 'none';
+            document.getElementById('container').style.display = 'flex';
+        }, 3000); // 3秒後跳轉
+
+        nameInput.value = localStorage.getItem('volunteer_name') || '';
+        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
     });
 
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
@@ -122,11 +133,6 @@
     const nameInput = document.getElementById('name');
     const idCardInput = document.getElementById('idCard');
     const btn = document.getElementById('submitBtn');
-
-    window.addEventListener('load', () => {
-        nameInput.value = localStorage.getItem('volunteer_name') || '';
-        idCardInput.value = localStorage.getItem('volunteer_idCard') || '';
-    });
 
     nameInput.addEventListener('input', () => localStorage.setItem('volunteer_name', nameInput.value));
     idCardInput.addEventListener('input', () => localStorage.setItem('volunteer_idCard', idCardInput.value));
