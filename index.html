@@ -15,32 +15,36 @@
             align-items: center;
             min-height: 100vh;
             font-family: "標楷體", "DFKai-SB", "BiauKai", serif;
-            font-size: 30px;
             color: white;
+            overflow: hidden;
         }
 
-        /* 彩色呼吸燈動畫 */
-        @keyframes rainbowBreath {
-            0% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
-            20% { color: #ff8000; text-shadow: 0 0 20px #ff8000; }
-            40% { color: #ffff00; text-shadow: 0 0 10px #ffff00; }
-            60% { color: #00ff00; text-shadow: 0 0 20px #00ff00; }
-            80% { color: #00ffff; text-shadow: 0 0 10px #00ffff; }
-            100% { color: #ff0000; text-shadow: 0 0 10px #ff0000; }
+        /* 歡迎畫面樣式 */
+        #welcomeScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
         }
+        #welcomeText { font-size: 55px; color: white; }
 
         #container {
-            display: flex;
-            flex-direction: column; /* 直式排列 */
+            display: none; /* 初始隱藏 */
+            flex-direction: column;
             align-items: center;
             width: 100%;
             padding: 20px;
         }
 
+        /* 標題修改：大小55px, 單一黑色 */
         h2#mainTitle {
-            font-size: 45px;
+            font-size: 55px;
             margin-bottom: 30px;
-            animation: rainbowBreath 4s infinite ease-in-out; /* 套用呼吸燈 */
+            color: black; 
             text-align: center;
         }
 
@@ -58,32 +62,24 @@
         label { display: block; font-weight: bold; margin-bottom: 10px; font-size: 24px; }
         
         input, select { 
-            width: 100%; 
-            padding: 12px; 
-            font-size: 22px;
-            font-family: inherit;
-            border: 2px solid #ccc; 
-            border-radius: 8px; 
-            box-sizing: border-box; 
+            width: 100%; padding: 12px; font-size: 22px; font-family: inherit;
+            border: 2px solid #ccc; border-radius: 8px; box-sizing: border-box; 
         }
 
         button { 
-            width: 100%; 
-            padding: 15px; 
-            background: #b91d1d; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 24px; 
-            font-family: inherit;
-            font-weight: bold;
-            transition: 0.3s;
+            width: 100%; padding: 15px; background: #b91d1d; color: white; 
+            border: none; border-radius: 8px; cursor: pointer; font-size: 24px; 
+            font-family: inherit; font-weight: bold; transition: 0.3s;
         }
         button:hover { background: #7f1d1d; transform: scale(1.02); }
     </style>
 </head>
 <body>
+    <!-- 初始歡迎畫面 -->
+    <div id="welcomeScreen">
+        <div id="welcomeText">歡迎</div>
+    </div>
+
     <div id="container">
         <h2 id="mainTitle">志工簽到表單</h2>
         <form id="signForm">
@@ -108,6 +104,19 @@
     </div>
 
     <script>
+    // 歡迎畫面邏輯：顯示 2 秒後跳轉
+    window.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            const welcome = document.getElementById('welcomeScreen');
+            const container = document.getElementById('container');
+            welcome.style.opacity = '0';
+            setTimeout(() => {
+                welcome.style.display = 'none';
+                container.style.display = 'flex';
+            }, 1000);
+        }, 2000);
+    });
+
     const scriptURL = 'https://script.google.com/macros/s/AKfycbwIMnqLA4-oxnm3gxyiOaBMdIzkcjuRRSuYcsvwZSASU95agw9ajxSCtvHAg0Xw7hJqQg/exec';
     const form = document.getElementById('signForm');
     const nameInput = document.getElementById('name');
