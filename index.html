@@ -77,22 +77,15 @@
             transition: 0.3s;
         }
         button:hover { background: #7f1d1d; transform: scale(1.02); }
-        .footer {
-    margin-top: 20px;
-    font-size: 20px;
+.footer {
+    margin-top: 25px;
+    font-size: 22px;
     font-weight: bold;
-    color: #000080; /* 藏青色基礎值 */
+    color: #A5F2F3; /* 固定冰藍色 */
     text-align: center;
-    animation: breathing 3s ease-in-out infinite;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
 }
-
-@keyframes breathing {
-    0%, 100% { color: #000080; opacity: 1; text-shadow: 0 0 5px rgba(0,0,128,0.5); }
-    50% { color: #1a1a99; opacity: 0.5; text-shadow: 0 0 15px rgba(0,0,128,0.8); }
-}
-
-
-        /* 行動裝置適應 */
+  /* 行動裝置適應 */
         @media (max-width: 480px) {
             h2#mainTitle { font-size: 40px; }
             #signForm { padding: 20px; }
@@ -171,5 +164,6 @@
     </script>
 </body>
 </html>
+
 
 
